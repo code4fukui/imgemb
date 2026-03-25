@@ -1,0 +1,76 @@
+<!-- 画像ファイルをドロップするとBase64にしたsrcを設定したimgタグに変換するアプリをHTML1ファイルでつくって by OpenAI API -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image to Base64 Converter</title>
+<style>
+body {
+    text-align: center;
+}
+#drop-area {
+    width: 80%;
+    height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    margin: 20px auto;
+    text-align: center;
+}
+textarea {
+    width: 80%;
+    height: 10em;
+}
+footer a {
+    color: gray !important;
+}
+</style>
+</head>
+<body>
+<h1>Image to Base64 Converter</h1>
+
+<div id="drop-area">
+    ここに画像ファイルをドロップしてください
+</div>
+<textarea id="image"></textarea>
+
+<footer>
+<a href=https://github.com/code4fukui/imgemb/>src on GitHub</a>
+</footer>
+
+<script type="module">
+const dropArea = document.getElementById('drop-area');
+const imgElement = document.getElementById('image');
+
+dropArea.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropArea.style.borderColor = '#000';
+});
+
+dropArea.addEventListener('dragleave', () => {
+    dropArea.style.borderColor = '#ccc';
+});
+
+dropArea.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropArea.style.borderColor = '#ccc';
+
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const b64 = `<img src="${reader.result}">`;
+            imgElement.value = b64;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('画像ファイルをドロップしてください');
+    }
+});
+</script>
+</body>
+</html>
